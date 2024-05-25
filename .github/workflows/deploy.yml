@@ -73,10 +73,10 @@ jobs:
           host: ${{ secrets.AZURE_VM_IP }}
           username: azureuser
           key: ${{ secrets.AZURE_SSH_PRIVATE_KEY }}
-        run: |
-          az acr login --name ${{ secrets.AZURE_CONTAINER_REGISTRY }}
-          docker pull ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest
-          docker stop $(docker ps -q --filter ancestor=${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest) || true
-          docker rm $(docker ps -q --filter ancestor=${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest) || true
-          docker run -d -p 80:8080 --name=text-summarizer ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest
-          docker system prune -f
+          script: |
+            az acr login --name ${{ secrets.AZURE_CONTAINER_REGISTRY }}
+            docker pull ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest
+            docker stop $(docker ps -q --filter ancestor=${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest) || true
+            docker rm $(docker ps -q --filter ancestor=${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest) || true
+            docker run -d -p 80:8080 --name=text-summarizer ${{ secrets.AZURE_CONTAINER_REGISTRY }}.azurecr.io/text-summarizer:latest
+            docker system prune -f
